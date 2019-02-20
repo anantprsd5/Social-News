@@ -21,7 +21,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.CustomViewHold
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.employee_list, parent, false);
+                .inflate(R.layout.articles_list, parent, false);
 
         return new CustomViewHolder(itemView);
     }
@@ -43,7 +43,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.CustomViewHold
 
         public CustomViewHolder(View view) {
             super(view);
-            articleName = (TextView) view.findViewById(R.id.articleName);
+            articleName = view.findViewById(R.id.articleName);
         }
     }
 }
