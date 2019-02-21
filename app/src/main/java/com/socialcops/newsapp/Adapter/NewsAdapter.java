@@ -1,12 +1,13 @@
-package com.socialcops.newsapp;
+package com.socialcops.newsapp.Adapter;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.socialcops.newsapp.Model.Articles;
+import com.socialcops.newsapp.R;
 
 import java.util.List;
 

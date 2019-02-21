@@ -1,18 +1,25 @@
-package com.socialcops.newsapp;
+package com.socialcops.newsapp.Activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.socialcops.newsapp.Adapter.NewsAdapter;
+import com.socialcops.newsapp.DI.DaggerNewsComponent;
+import com.socialcops.newsapp.DI.NewsComponent;
+import com.socialcops.newsapp.DI.NewsModule;
 import com.socialcops.newsapp.Model.Articles;
 import com.socialcops.newsapp.Presenter.MainActivityPresenter;
+import com.socialcops.newsapp.R;
 import com.socialcops.newsapp.View.MainView;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 
@@ -23,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
+    @Inject
+    MainActivityPresenter mainActivityPresenter;
+
     private NewsAdapter eAdapter;
 
     @Override
@@ -30,9 +40,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainActivityPresenter mainActivityPresenter = new MainActivityPresenter(this, this);
-        mainActivityPresenter.getArticlesList();
+        NewsComponent newsComponent = DaggerNewsComponent.builder()
+                .newsModule(new NewsModule(this, this))
+                .build();
+        newsComponent.addActivity(this);
 
+        mainActivityPresenter.getArticlesList();
     }
 
     @Override
