@@ -22,15 +22,17 @@ public class MainActivityPresenter {
 
     @Inject
     TelephonyManager telephonyManager;
-    @Inject
+
     Call<News> call;
 
     @Inject
-    public MainActivityPresenter(Context context, MainView mainView){
+    public MainActivityPresenter(Context context, MainView mainView, Call<News> call){
         this.context = context;
         this.mainView = mainView;
+        this.call = call;
     }
 
+    @Inject
     public void getArticlesList(){
         call.enqueue(new Callback<News>() {
             @Override

@@ -13,6 +13,7 @@ import com.socialcops.newsapp.DI.DaggerNewsComponent;
 import com.socialcops.newsapp.DI.NewsComponent;
 import com.socialcops.newsapp.DI.NewsModule;
 import com.socialcops.newsapp.Model.Articles;
+import com.socialcops.newsapp.Model.News;
 import com.socialcops.newsapp.Presenter.MainActivityPresenter;
 import com.socialcops.newsapp.R;
 import com.socialcops.newsapp.View.MainView;
@@ -22,6 +23,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 
@@ -32,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Inject
     MainActivityPresenter mainActivityPresenter;
+    @Inject
+    Call<News> call;
 
     private NewsAdapter eAdapter;
 
@@ -39,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
 
         NewsComponent newsComponent = DaggerNewsComponent.builder()
                 .newsModule(new NewsModule(this, this))
