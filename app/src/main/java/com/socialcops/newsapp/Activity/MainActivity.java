@@ -2,6 +2,7 @@ package com.socialcops.newsapp.Activity;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     ProgressBar progressBar;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Inject
     MainActivityPresenter mainActivityPresenter;
@@ -51,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 .newsModule(new NewsModule(this, this))
                 .build();
         newsComponent.addActivity(this);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("News App");
 
         mainActivityPresenter.getArticlesList();
     }

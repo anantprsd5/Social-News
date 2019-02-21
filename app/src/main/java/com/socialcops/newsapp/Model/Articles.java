@@ -3,6 +3,8 @@ package com.socialcops.newsapp.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import javax.inject.Inject;
+
 public class Articles {
 
     @SerializedName("source")
@@ -30,6 +32,7 @@ public class Articles {
     @Expose
     private String content;
 
+    @SuppressWarnings("unused")
     public Source getSource() {
         return source;
     }
