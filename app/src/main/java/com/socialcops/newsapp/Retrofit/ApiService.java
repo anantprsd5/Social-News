@@ -13,5 +13,6 @@ public interface ApiService {
     And our method that will return us the List of EmployeeList
     */
     @GET("top-headlines")
-    Call<News> getMyJSON(@Query("country") String country, @Query("apiKey") String apiKey);
+    Call<News> getMyJSON(@Query("country") String country, @Query("apiKey") String apiKey,
+                          @Query("page") String page);
 }
