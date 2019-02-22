@@ -1,8 +1,13 @@
 package com.socialcops.newsapp.Activity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 
 import com.socialcops.newsapp.Adapter.NewsAdapter;
 import com.socialcops.newsapp.DI.DaggerNewsComponent;
@@ -58,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         newsComponent.addActivity(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("News App");
+        getSupportActionBar().setTitle("Social News");
 
         mainActivityPresenter.getArticlesList(page);
 
@@ -100,9 +105,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-
                 if (!isLoading) {
                     if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == articles.size() - 1) {
                         //bottom of list!
@@ -116,6 +119,24 @@ public class MainActivity extends AppCompatActivity implements MainView {
             }
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        return true;
+    }
+
+
 
     private void loadMore() {
         articles.add(null);
