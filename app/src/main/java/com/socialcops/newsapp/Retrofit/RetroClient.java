@@ -30,6 +30,7 @@ public class RetroClient {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(provideOfflineCacheInterceptor(mContext))
                 .addNetworkInterceptor(provideCacheInterceptor(mContext))

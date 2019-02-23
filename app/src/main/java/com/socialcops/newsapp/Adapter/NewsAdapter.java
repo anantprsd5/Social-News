@@ -1,6 +1,7 @@
 package com.socialcops.newsapp.Adapter;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -26,11 +27,14 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Articles> articles;
     private Context context;
 
+    private MainView mainView;
+
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
 
-    public NewsAdapter(List<Articles> articles) {
+    public NewsAdapter(List<Articles> articles, MainView mainView) {
         this.articles = articles;
+        this.mainView = mainView;
     }
 
     public void update(List<Articles> articles){
@@ -81,12 +85,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return articles.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
-    private class CustomViewHolder extends RecyclerView.ViewHolder {
+    private class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView articleNameView;
         public TextView articleSourceView;
         public TextView articleDateView;
         public ImageView articleImageView;
+        public CardView cardView;
 
         public CustomViewHolder(View view) {
             super(view);
@@ -94,6 +99,15 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             articleDateView = view.findViewById(R.id.news_date);
             articleSourceView = view.findViewById(R.id.news_source);
             articleImageView = view.findViewById(R.id.news_image);
+            cardView = view.findViewById(R.id.card_view);
+            cardView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            String url = articles.get(position).getUrl();
+            mainView.onItemClick(url);
         }
     }
 

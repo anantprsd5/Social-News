@@ -2,6 +2,7 @@ package com.socialcops.newsapp.Activity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             eAdapter.notifyDataSetChanged();
         } else {
             articles.addAll(articlesList);
-            eAdapter = new NewsAdapter(articles);
+            eAdapter = new NewsAdapter(articles, this);
             RecyclerView.LayoutManager eLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(eLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -103,6 +104,20 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void onFailure(Throwable t) {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onItemClick(String url) {
+        progressBar.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra("URL", url);
+        startActivity(intent);
     }
 
     public void initScrollListener(int totalResults) {
