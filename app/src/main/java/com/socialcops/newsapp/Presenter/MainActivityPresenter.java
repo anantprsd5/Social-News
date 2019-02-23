@@ -1,8 +1,12 @@
 package com.socialcops.newsapp.Presenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.socialcops.newsapp.Constants;
@@ -32,7 +36,7 @@ public class MainActivityPresenter {
     }
 
     public void getArticlesList(int page) {
-        ApiService apiService = RetroClient.getApiService();
+        ApiService apiService = RetroClient.getApiService(context);
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String countryCodeValue = telephonyManager.getNetworkCountryIso();
         //Call to retrofit to get JSON response converted to POJO
@@ -56,7 +60,7 @@ public class MainActivityPresenter {
     }
 
     public void getSearchedArticlesList(String query, int page) {
-        ApiService apiService = RetroClient.getApiService();
+        ApiService apiService = RetroClient.getApiService(context);
         //Call to retrofit to get JSON response converted to POJO
         Call<News> call = apiService.getSearchJSON(query, Constants.API_KEY, Integer.toString(page));
         call.enqueue(new Callback<News>() {
@@ -74,5 +78,26 @@ public class MainActivityPresenter {
                 mainView.onFailure(t);
             }
         });
+    }
+
+    public void setSearchViewFeatures(SearchView searchView) {
+        searchView.setQueryHint("Search");
+        searchView.setIconifiedByDefault(false);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.requestFocusFromTouch();
+        searchView.requestFocus();
+        searchView.setFocusableInTouchMode(true);
+    }
+
+    public void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.socialcops.newsapp.Model.Articles;
 import com.socialcops.newsapp.R;
 import com.socialcops.newsapp.View.MainView;
@@ -63,6 +64,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .with(context)
                     .load(article.getUrlToImage())
                     .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(viewHolder.articleImageView);
         } else if (holder instanceof LoadingViewHolder) {
             //Display Progress

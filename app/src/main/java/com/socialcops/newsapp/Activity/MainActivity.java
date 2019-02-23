@@ -1,6 +1,5 @@
 package com.socialcops.newsapp.Activity;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -8,10 +7,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.socialcops.newsapp.Adapter.NewsAdapter;
 import com.socialcops.newsapp.DI.DaggerNewsComponent;
@@ -84,15 +81,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
             scrollPosition = articles.size();
             eAdapter.notifyItemRemoved(scrollPosition);
             isLoading = false;
-        }
-        recyclerView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
-        articles.addAll(articlesList);
-        if(page>1){
+            articles.addAll(articlesList);
             eAdapter.update(articles);
             eAdapter.notifyDataSetChanged();
-        }
-        if (page == 1) {
+        } else {
+            articles.addAll(articlesList);
             eAdapter = new NewsAdapter(articles);
             RecyclerView.LayoutManager eLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(eLayoutManager);
@@ -101,9 +94,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
             progressBar.setVisibility(View.GONE);
             eAdapter.notifyDataSetChanged();
             initScrollListener(totalResults);
-            Toast.makeText(getApplicationContext(), Integer.toString(totalResults), Toast.LENGTH_SHORT).show();
         }
 
+        recyclerView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -126,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                     int visibleItemCount = layoutManager.getChildCount();
                     int totalItemCount = layoutManager.getItemCount();
                     int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                    if ( (visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
                         //bottom of list!
                         int item = totalResults / page;
                         if (item > 20) {
@@ -152,14 +146,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
 
-        searchView.setQueryHint("Search");
-        searchView.setIconifiedByDefault(false);
-        searchView.setFocusable(true);
-        searchView.setIconified(false);
-        searchView.requestFocusFromTouch();
-        searchView.requestFocus();
-        searchView.setFocusableInTouchMode(true);
-        
+        mainActivityPresenter.setSearchViewFeatures(searchView);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -188,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
-                hideKeyboard();
+                mainActivityPresenter.hideKeyboard(MainActivity.this);
                 page = 1;
                 isSearched = false;
                 articles = new ArrayList<>();
@@ -202,23 +190,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
         return true;
     }
 
-    public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(getApplicationContext());
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
     private void loadMore(boolean isSearched) {
         articles.add(null);
         eAdapter.notifyItemInserted(articles.size() - 1);
         page++;
-        if(!isSearched)
-        mainActivityPresenter.getArticlesList(page);
+        if (!isSearched)
+            mainActivityPresenter.getArticlesList(page);
         else mainActivityPresenter.getSearchedArticlesList(searchKey, page);
     }
 }
