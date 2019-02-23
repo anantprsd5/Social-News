@@ -2,6 +2,8 @@ package com.socialcops.newsapp.Presenter;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.socialcops.newsapp.Constants;
 import com.socialcops.newsapp.Model.Articles;
@@ -36,6 +38,27 @@ public class MainActivityPresenter {
         //Call to retrofit to get JSON response converted to POJO
         Call<News> call = apiService.getMyJSON(countryCodeValue.toLowerCase(), Constants.API_KEY,
                 Integer.toString(page));
+        call.enqueue(new Callback<News>() {
+            @Override
+            public void onResponse(Call<News> call, Response<News> response) {
+
+                if (response.isSuccessful()) {
+                    List<Articles> articlesList = response.body().getArticles();
+                    mainView.onArticleListFetched(articlesList, response.body().getTotalResults());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<News> call, Throwable t) {
+                mainView.onFailure(t);
+            }
+        });
+    }
+
+    public void getSearchedArticlesList(String query, int page) {
+        ApiService apiService = RetroClient.getApiService();
+        //Call to retrofit to get JSON response converted to POJO
+        Call<News> call = apiService.getSearchJSON(query, Constants.API_KEY, Integer.toString(page));
         call.enqueue(new Callback<News>() {
             @Override
             public void onResponse(Call<News> call, Response<News> response) {

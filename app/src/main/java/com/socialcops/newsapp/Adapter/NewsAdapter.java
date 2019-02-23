@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.socialcops.newsapp.Model.Articles;
 import com.socialcops.newsapp.R;
+import com.socialcops.newsapp.View.MainView;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Articles> articles;
@@ -25,6 +29,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_TYPE_LOADING = 1;
 
     public NewsAdapter(List<Articles> articles) {
+        this.articles = articles;
+    }
+
+    public void update(List<Articles> articles){
         this.articles = articles;
     }
 

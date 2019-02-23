@@ -23,4 +23,9 @@ public class NewsModule {
     MainActivityPresenter getMainActivityPresenter() {
         return new MainActivityPresenter(context, mainView);
     }
+
+    @Provides
+    MainView getMainView() {
+        return mainView;
+    }
 }

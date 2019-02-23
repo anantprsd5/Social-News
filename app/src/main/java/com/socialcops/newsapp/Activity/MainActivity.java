@@ -1,13 +1,17 @@
 package com.socialcops.newsapp.Activity;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.socialcops.newsapp.Adapter.NewsAdapter;
 import com.socialcops.newsapp.DI.DaggerNewsComponent;
@@ -44,11 +48,14 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Inject
     MainActivityPresenter mainActivityPresenter;
 
+    private String searchKey;
+
     private NewsAdapter eAdapter;
     boolean isLoading = false;
     private List<Articles> articles = new ArrayList<>();
 
     private int page = 1;
+    boolean isSearched = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,23 +78,32 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void onArticleListFetched(List<Articles> articlesList, int totalResults) {
+        int scrollPosition;
         if (page > 1) {
             articles.remove(articles.size() - 1);
-            int scrollPosition = articles.size();
+            scrollPosition = articles.size();
             eAdapter.notifyItemRemoved(scrollPosition);
             isLoading = false;
         }
-        articles.addAll(articlesList);
-        eAdapter = new NewsAdapter(articles);
-        RecyclerView.LayoutManager eLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(eLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(eAdapter);
+        recyclerView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
-        eAdapter.notifyDataSetChanged();
-        if (page == 1) {
-            initScrollListener(totalResults);
+        articles.addAll(articlesList);
+        if(page>1){
+            eAdapter.update(articles);
+            eAdapter.notifyDataSetChanged();
         }
+        if (page == 1) {
+            eAdapter = new NewsAdapter(articles);
+            RecyclerView.LayoutManager eLayoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(eLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(eAdapter);
+            progressBar.setVisibility(View.GONE);
+            eAdapter.notifyDataSetChanged();
+            initScrollListener(totalResults);
+            Toast.makeText(getApplicationContext(), Integer.toString(totalResults), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -105,13 +121,16 @@ public class MainActivity extends AppCompatActivity implements MainView {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == articles.size() - 1) {
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                    if ( (visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
                         //bottom of list!
                         int item = totalResults / page;
                         if (item > 20) {
-                            loadMore();
+                            loadMore(isSearched);
                             isLoading = true;
                         }
                     }
@@ -133,15 +152,73 @@ public class MainActivity extends AppCompatActivity implements MainView {
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
 
+        searchView.setQueryHint("Search");
+        searchView.setIconifiedByDefault(false);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.requestFocusFromTouch();
+        searchView.requestFocus();
+        searchView.setFocusableInTouchMode(true);
+        
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                page = 1;
+                isSearched = true;
+                searchKey = query;
+                articles = new ArrayList<>();
+                recyclerView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                mainActivityPresenter.getSearchedArticlesList(searchKey, page);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                hideKeyboard();
+                page = 1;
+                isSearched = false;
+                articles = new ArrayList<>();
+                recyclerView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                mainActivityPresenter.getArticlesList(page);
+                return true;
+            }
+        });
+
         return true;
     }
 
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(getApplicationContext());
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
-
-    private void loadMore() {
+    private void loadMore(boolean isSearched) {
         articles.add(null);
         eAdapter.notifyItemInserted(articles.size() - 1);
         page++;
+        if(!isSearched)
         mainActivityPresenter.getArticlesList(page);
+        else mainActivityPresenter.getSearchedArticlesList(searchKey, page);
     }
 }
