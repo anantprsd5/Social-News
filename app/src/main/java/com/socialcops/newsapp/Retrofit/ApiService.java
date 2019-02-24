@@ -1,6 +1,7 @@
 package com.socialcops.newsapp.Retrofit;
 
 import com.socialcops.newsapp.Model.News;
+import com.socialcops.newsapp.Model.SourceModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -19,5 +20,8 @@ public interface ApiService {
     @GET("everything")
     Call<News> getSearchJSON(@Query("q") String query, @Query("apiKey") String apiKey
     , @Query("page") String page);
+
+    @GET("sources")
+    Call<SourceModel> getSourceJSON(@Query("apiKey") String apiKey);
 
 }

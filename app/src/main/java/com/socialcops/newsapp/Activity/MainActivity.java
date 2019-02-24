@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.socialcops.newsapp.Adapter.NewsAdapter;
 import com.socialcops.newsapp.DI.DaggerNewsComponent;
@@ -141,6 +142,19 @@ public class MainActivity extends AppCompatActivity implements MainView {
         startActivity(intent);
     }
 
+    @Override
+    public void fetchedSourcesList(String sources) {
+        Toast.makeText(this, sources, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void toggleProgressVisibility(boolean visible) {
+        if(visible)
+            progressBar.setVisibility(View.VISIBLE);
+        else
+            progressBar.setVisibility(View.GONE);
+    }
+
     public void initScrollListener(int totalResults) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -240,8 +254,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
                         Collections.sort(articles);
                         eAdapter.update(articles);
                         eAdapter.notifyDataSetChanged();
+                        recyclerView.scrollToPosition(0);
                     }
                 }
+                return true;
+            case R.id.item2:
+                toggleProgressVisibility(true);
+                mainActivityPresenter.getSourcesList();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
