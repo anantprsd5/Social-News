@@ -3,9 +3,17 @@ package com.socialcops.newsapp.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
+
 import javax.inject.Inject;
 
-public class Articles {
+import dagger.Component;
+
+public class Articles implements Comparable {
 
     @SerializedName("source")
     @Expose
@@ -97,4 +105,23 @@ public class Articles {
         this.content = content;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        String compare=((Articles)o).getPublishedAt();
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        Date date = null;
+        Date date1 = null;
+        try {
+            date = inputFormat.parse(compare);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        try {
+            date1 = inputFormat.parse(publishedAt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.compareTo(date1);
+    }
 }

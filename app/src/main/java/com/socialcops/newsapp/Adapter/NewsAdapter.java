@@ -19,7 +19,11 @@ import com.socialcops.newsapp.Model.Articles;
 import com.socialcops.newsapp.R;
 import com.socialcops.newsapp.View.MainView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -62,7 +66,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             CustomViewHolder viewHolder = (CustomViewHolder) holder;
             viewHolder.articleNameView.setText(article.getTitle());
             viewHolder.articleSourceView.setText(article.getSource().getName());
-            viewHolder.articleDateView.setText(article.getPublishedAt());
+            String publishedAt = article.getPublishedAt();
+            String formatted = publishedAt.substring(0, publishedAt.indexOf('T'));
+            String formattedDate = getFormattedDate(formatted);
+            viewHolder.articleDateView.setText(formattedDate);
 
             Glide
                     .with(context)
@@ -73,6 +80,21 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (holder instanceof LoadingViewHolder) {
             //Display Progress
         }
+    }
+
+    private String getFormattedDate(String publishedAt) {
+        SimpleDateFormat month_date = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date = null;
+        try {
+            date = sdf.parse(publishedAt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String month_name = month_date.format(date);
+        return month_name;
     }
 
     @Override

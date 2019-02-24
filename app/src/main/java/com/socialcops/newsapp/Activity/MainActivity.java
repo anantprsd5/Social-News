@@ -11,21 +11,18 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
 import com.socialcops.newsapp.Adapter.NewsAdapter;
 import com.socialcops.newsapp.DI.DaggerNewsComponent;
 import com.socialcops.newsapp.DI.NewsComponent;
 import com.socialcops.newsapp.DI.NewsModule;
 import com.socialcops.newsapp.JobSchedulerHelper;
 import com.socialcops.newsapp.Model.Articles;
-import com.socialcops.newsapp.NotificationHandler;
 import com.socialcops.newsapp.Presenter.MainActivityPresenter;
 import com.socialcops.newsapp.R;
 import com.socialcops.newsapp.View.MainView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -63,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private int page = 1;
     boolean isSearched = false;
 
+    private MenuItem sortItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             page = 1;
-            if(!isSearched) {
+            if (!isSearched) {
                 swipeRefreshLayout.setRefreshing(true);
                 mainActivityPresenter.getArticlesList(page);
                 articles = new ArrayList<>();
@@ -93,8 +92,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
-
     }
 
     @Override
@@ -229,7 +226,31 @@ public class MainActivity extends AppCompatActivity implements MainView {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.item1:
+                sortItem = item;
+                if(item.isChecked())
+                item.setChecked(false);
+                else {
+                    item.setChecked(true);
+                    if (articles != null) {
+                        Collections.sort(articles);
+                        eAdapter.update(articles);
+                        eAdapter.notifyDataSetChanged();
+                    }
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void loadMore(boolean isSearched) {
+        if(sortItem!=null)
+            sortItem.setChecked(false);
         articles.add(null);
         eAdapter.notifyItemInserted(articles.size() - 1);
         page++;
