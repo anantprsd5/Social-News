@@ -1,5 +1,6 @@
 package com.socialcops.newsapp.Activity;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;

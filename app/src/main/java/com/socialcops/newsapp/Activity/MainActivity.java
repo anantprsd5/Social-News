@@ -36,6 +36,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     RecyclerView recyclerView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.swipe_container)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Inject
     MainActivityPresenter mainActivityPresenter;
@@ -80,11 +83,23 @@ public class MainActivity extends AppCompatActivity implements MainView {
         JobSchedulerHelper jobSchedulerHelper = new JobSchedulerHelper(this);
         jobSchedulerHelper.createJobDispatcher();
 
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            page = 1;
+            if(!isSearched) {
+                swipeRefreshLayout.setRefreshing(true);
+                mainActivityPresenter.getArticlesList(page);
+                articles = new ArrayList<>();
+            } else {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
 
     }
 
     @Override
     public void onArticleListFetched(List<Articles> articlesList, int totalResults) {
+        swipeRefreshLayout.setRefreshing(false);
         int scrollPosition;
         if (page > 1) {
             articles.remove(articles.size() - 1);
