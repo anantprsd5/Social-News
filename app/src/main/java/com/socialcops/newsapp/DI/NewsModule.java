@@ -3,6 +3,7 @@ package com.socialcops.newsapp.DI;
 import android.content.Context;
 
 import com.socialcops.newsapp.Presenter.MainActivityPresenter;
+import com.socialcops.newsapp.Presenter.WebActivityPresenter;
 import com.socialcops.newsapp.View.MainView;
 
 import dagger.Module;
