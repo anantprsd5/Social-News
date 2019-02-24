@@ -11,11 +11,16 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
 import com.socialcops.newsapp.Adapter.NewsAdapter;
 import com.socialcops.newsapp.DI.DaggerNewsComponent;
 import com.socialcops.newsapp.DI.NewsComponent;
 import com.socialcops.newsapp.DI.NewsModule;
+import com.socialcops.newsapp.JobSchedulerHelper;
 import com.socialcops.newsapp.Model.Articles;
+import com.socialcops.newsapp.NotificationHandler;
 import com.socialcops.newsapp.Presenter.MainActivityPresenter;
 import com.socialcops.newsapp.R;
 import com.socialcops.newsapp.View.MainView;
@@ -71,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
         getSupportActionBar().setTitle("Social News");
 
         mainActivityPresenter.getArticlesList(page);
+
+        JobSchedulerHelper jobSchedulerHelper = new JobSchedulerHelper(this);
+        jobSchedulerHelper.createJobDispatcher();
+
 
     }
 
