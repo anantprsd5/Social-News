@@ -15,7 +15,7 @@ public interface ApiService {
     */
     @GET("top-headlines")
     Call<News> getMyJSON(@Query("country") String country, @Query("apiKey") String apiKey,
-                          @Query("page") String page);
+                          @Query("page") String page, @Query("sources") String sources);
 
     @GET("everything")
     Call<News> getSearchJSON(@Query("q") String query, @Query("apiKey") String apiKey

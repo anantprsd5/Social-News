@@ -41,13 +41,11 @@ public class MainActivityPresenter {
         this.mainView = mainView;
     }
 
-    public void getArticlesList(int page) {
+    public void getArticlesList(int page, String sourcesString, String countryCodeValue) {
         ApiService apiService = RetroClient.getApiService(context);
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String countryCodeValue = telephonyManager.getNetworkCountryIso();
         //Call to retrofit to get JSON response converted to POJO
         Call<News> call = apiService.getMyJSON(countryCodeValue.toLowerCase(), Constants.API_KEY,
-                Integer.toString(page));
+                Integer.toString(page), sourcesString);
         call.enqueue(new Callback<News>() {
             @Override
             public void onResponse(Call<News> call, Response<News> response) {

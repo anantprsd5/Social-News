@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -63,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private MenuItem sortItem;
 
+    private String sources = "";
+
+    private String countryCodeValue;
+    private TelephonyManager telephonyManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +84,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Social News");
 
-        mainActivityPresenter.getArticlesList(page);
+        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        countryCodeValue = telephonyManager.getNetworkCountryIso();
+
+        mainActivityPresenter.getArticlesList(page, "", countryCodeValue);
 
         JobSchedulerHelper jobSchedulerHelper = new JobSchedulerHelper(this);
         jobSchedulerHelper.createJobDispatcher();
@@ -87,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             page = 1;
             if (!isSearched) {
                 swipeRefreshLayout.setRefreshing(true);
-                mainActivityPresenter.getArticlesList(page);
+                mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
                 articles = new ArrayList<>();
             } else {
                 swipeRefreshLayout.setRefreshing(false);
@@ -144,7 +153,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void fetchedSourcesList(String sources) {
+        this.sources = sources;
         Toast.makeText(this, sources, Toast.LENGTH_SHORT).show();
+        page = 1;
+        articles = new ArrayList<>();
+        countryCodeValue = "";
+        mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
     }
 
     @Override
@@ -232,7 +246,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 articles = new ArrayList<>();
                 recyclerView.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
-                mainActivityPresenter.getArticlesList(page);
+                countryCodeValue = telephonyManager.getNetworkCountryIso();
+                sources = "";
+                mainActivityPresenter.getArticlesList(page, countryCodeValue, sources);
                 return true;
             }
         });
@@ -274,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         eAdapter.notifyItemInserted(articles.size() - 1);
         page++;
         if (!isSearched)
-            mainActivityPresenter.getArticlesList(page);
+            mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
         else mainActivityPresenter.getSearchedArticlesList(searchKey, page);
     }
 }
