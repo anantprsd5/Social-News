@@ -5,13 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Locale;
-
-import javax.inject.Inject;
-
-import dagger.Component;
 
 public class Articles implements Comparable {
 

@@ -1,4 +1,4 @@
-package com.socialcops.newsapp;
+package com.socialcops.newsapp.Helper;
 
 public class Constants {
 

@@ -1,7 +1,7 @@
 package com.socialcops.newsapp.View;
 
 public interface WebViewInterface {
-    public void onLoadFinished();
+    void onLoadFinished();
 
-    public void onErrorReceived(String description);
+    void onErrorReceived(String description);
 }

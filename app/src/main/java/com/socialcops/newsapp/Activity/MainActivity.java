@@ -17,7 +17,7 @@ import com.socialcops.newsapp.Adapter.NewsAdapter;
 import com.socialcops.newsapp.DI.DaggerNewsComponent;
 import com.socialcops.newsapp.DI.NewsComponent;
 import com.socialcops.newsapp.DI.NewsModule;
-import com.socialcops.newsapp.JobSchedulerHelper;
+import com.socialcops.newsapp.Helper.JobSchedulerHelper;
 import com.socialcops.newsapp.Model.Articles;
 import com.socialcops.newsapp.Presenter.MainActivityPresenter;
 import com.socialcops.newsapp.R;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private MenuItem sortItem;
 
-    private String sources = "";
+    private String sources;
 
     private String countryCodeValue;
     private TelephonyManager telephonyManager;
@@ -85,9 +85,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         getSupportActionBar().setTitle("Social News");
 
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        countryCodeValue = telephonyManager.getNetworkCountryIso();
-
-        mainActivityPresenter.getArticlesList(page, "", countryCodeValue);
+        getHeadlinesList();
 
         JobSchedulerHelper jobSchedulerHelper = new JobSchedulerHelper(this);
         jobSchedulerHelper.createJobDispatcher();
@@ -123,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
             recyclerView.setLayoutManager(eLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(eAdapter);
-            progressBar.setVisibility(View.GONE);
             eAdapter.notifyDataSetChanged();
             initScrollListener(totalResults);
         }
@@ -311,6 +308,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public boolean onSupportNavigateUp() {
+        getHeadlinesList();
+        return super.onSupportNavigateUp();
+    }
+
+    public void getHeadlinesList(){
         toggleProgressVisibility(true);
         recyclerView.setVisibility(View.GONE);
         page = 1;
@@ -319,6 +321,5 @@ public class MainActivity extends AppCompatActivity implements MainView {
         sources = "";
         mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
         setDisplayHomeAsUpEnabled(false);
-        return super.onSupportNavigateUp();
     }
 }

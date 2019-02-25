@@ -1,11 +1,6 @@
 package com.socialcops.newsapp.Adapter;
 
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +20,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Articles> articles;

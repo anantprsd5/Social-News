@@ -2,14 +2,11 @@ package com.socialcops.newsapp.Presenter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
-import android.widget.Toast;
 
-import com.socialcops.newsapp.Constants;
+import com.socialcops.newsapp.Helper.Constants;
 import com.socialcops.newsapp.Model.Articles;
 import com.socialcops.newsapp.Model.News;
 import com.socialcops.newsapp.Model.SourceModel;

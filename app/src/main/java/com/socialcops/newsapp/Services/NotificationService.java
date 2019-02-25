@@ -6,10 +6,10 @@ import android.util.Log;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
-import com.socialcops.newsapp.Constants;
+import com.socialcops.newsapp.Helper.Constants;
 import com.socialcops.newsapp.Model.Articles;
 import com.socialcops.newsapp.Model.News;
-import com.socialcops.newsapp.NotificationHandler;
+import com.socialcops.newsapp.Helper.NotificationHandler;
 import com.socialcops.newsapp.Retrofit.ApiService;
 import com.socialcops.newsapp.Retrofit.RetroClient;
 
@@ -22,7 +22,6 @@ import retrofit2.Response;
 public class NotificationService extends JobService {
     @Override
     public boolean onStartJob(JobParameters job) {
-        // Do some work here
         getLatestNews();
         return false; // Answers the question: "Is there still work going on?"
     }

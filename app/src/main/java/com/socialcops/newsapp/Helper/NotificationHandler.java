@@ -1,4 +1,4 @@
-package com.socialcops.newsapp;
+package com.socialcops.newsapp.Helper;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 
 import com.socialcops.newsapp.Activity.WebActivity;
+import com.socialcops.newsapp.R;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
