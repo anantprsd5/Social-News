@@ -3,4 +3,5 @@
     <string name="title_activity_web">WebActivity</string>
     <string name="channel_name">headline_notification</string>
     <string name="channel_description">Notifies user about a trending headline everyday</string>
+    <string name="error">Error occurred! Please try again</string>
 </resources>

@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void onFailure(Throwable t) {
         progressBar.setVisibility(View.GONE);
+        Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -154,11 +155,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void fetchedSourcesList(String sources) {
         this.sources = sources;
-        Toast.makeText(this, sources, Toast.LENGTH_SHORT).show();
+        toggleProgressVisibility(true);
+        recyclerView.setVisibility(View.GONE);
         page = 1;
         articles = new ArrayList<>();
         countryCodeValue = "";
         mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
+        setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -292,5 +295,25 @@ public class MainActivity extends AppCompatActivity implements MainView {
         if (!isSearched)
             mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
         else mainActivityPresenter.getSearchedArticlesList(searchKey, page);
+    }
+
+    public void setDisplayHomeAsUpEnabled(boolean value){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(value);
+        getSupportActionBar().setDisplayShowHomeEnabled(value);
+        String title = value==true?"Sources":"Social News";
+        getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        toggleProgressVisibility(true);
+        recyclerView.setVisibility(View.GONE);
+        page = 1;
+        articles = new ArrayList<>();
+        countryCodeValue = telephonyManager.getNetworkCountryIso();
+        sources = "";
+        mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
+        setDisplayHomeAsUpEnabled(false);
+        return super.onSupportNavigateUp();
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/search"
+        android:title="Search for news"
+        android:icon="@drawable/ic_search_black_24dp"
+        app:showAsAction="collapseActionView|always"
+        app:actionViewClass="android.widget.SearchView" />
+
+    <item android:id="@+id/sort"
+        android:title="Search for news"
+        android:icon="@drawable/ic_sort_black_24dp"
+        app:showAsAction="collapseActionView|always">
+
+        <menu>
+            <item android:id="@+id/item1" android:title="Sort by date"
+                android:checkable="true"></item>
+
+            <item android:id="@+id/item2" android:title="Sort by sources"></item>
+
+        </menu>
+
+    </item>
+</menu>
