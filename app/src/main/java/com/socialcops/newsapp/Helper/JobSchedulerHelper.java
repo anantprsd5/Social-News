@@ -22,7 +22,7 @@ public class JobSchedulerHelper {
     private final String JOB_TAG = "news_notification_tag";
     private FirebaseJobDispatcher dispatcher;
 
-    final int periodicity = (int)TimeUnit.HOURS.toSeconds(3); // Every 1 hour periodicity expressed as seconds
+    final int periodicity = (int)TimeUnit.HOURS.toSeconds(3); // Every 3 hour periodicity expressed as seconds
     final int toleranceInterval = (int) TimeUnit.HOURS.toSeconds(4);
 
     public JobSchedulerHelper(Context context) {
@@ -37,7 +37,7 @@ public class JobSchedulerHelper {
                 // uniquely identifies the job
                 .setTag(JOB_TAG)
                 // one-off job
-                .setRecurring(false)
+                .setRecurring(true)
                 // don't persist past a device reboot
                 .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
                 // start between 0 and 60 seconds from now

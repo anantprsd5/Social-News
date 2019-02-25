@@ -13,9 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 import java.util.List;
 
@@ -69,13 +67,10 @@ public class MainActivityTest {
         ApiService apiService = Mockito.mock(ApiService.class);
         Call<News> mockedCall = Mockito.mock(Call.class);
         Mockito.when(apiService.getSearchJSON("test", Constants.API_KEY, Integer.toString(1), "")).thenReturn(mockedCall);
-        Mockito.doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                Callback<News> callback = invocation.getArgument(0);
-                callback.onResponse(mockedCall, Response.success(new News()));
-                return null;
-            }
+        Mockito.doAnswer(invocation -> {
+            Callback<News> callback = invocation.getArgument(0);
+            callback.onResponse(mockedCall, Response.success(new News()));
+            return null;
         }).when(mockedCall).enqueue(any(Callback.class));
         List<Articles> articles = Mockito.mock(List.class);
         mainView.onArticleListFetched(articles, 10);
