@@ -151,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void fetchedSourcesList(String sources) {
+        if(sources.length()==0)
+            return;
         this.sources = sources;
         toggleProgressVisibility(true);
         recyclerView.setVisibility(View.GONE);
@@ -223,7 +225,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 articles = new ArrayList<>();
                 recyclerView.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
-                sortItem.setChecked(false);
+                if(sortItem!=null)
+                    sortItem.setChecked(false);
                 mainActivityPresenter.getSearchedArticlesList(searchKey, page, sources);
                 return false;
             }

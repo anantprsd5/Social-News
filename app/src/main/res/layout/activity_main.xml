@@ -20,8 +20,8 @@
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="@dimen/expanded_title_margin"
+            app:expandedTitleMarginEnd="@dimen/expanded_title_margin_end"
             app:titleEnabled="false"
             app:collapsedTitleGravity="center"
             android:fitsSystemWindows="true">

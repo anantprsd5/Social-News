@@ -1,3 +1,14 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="cardview_layout_margin">8dp</dimen>
+    <dimen name="imageview_height">200dp</dimen>
+    <dimen name="linearlayout_margin">8dp</dimen>
+    <dimen name="textView_padding">2dp</dimen>
+    <dimen name="news_source_text_size">12sp</dimen>
+    <dimen name="news_title_text_size">16sp</dimen>
+    <dimen name="news_date_text_size">12sp</dimen>
+    <dimen name="card_view_corner_radius">4dp</dimen>
+    <dimen name="loading_layout_margin">8dp</dimen>
+    <dimen name="expanded_title_margin">48dp</dimen>
+    <dimen name="expanded_title_margin_end">64dp</dimen>
 </resources>

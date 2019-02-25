@@ -4,8 +4,8 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="2dp">
+    android:layout_margin="@dimen/cardview_layout_margin"
+    app:cardCornerRadius="@dimen/card_view_corner_radius">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,41 +16,38 @@
         <ImageView
             android:id="@+id/news_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="@dimen/imageview_height" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/linearlayout_margin"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/news_source"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="Times of India"
+                android:padding="@dimen/textView_padding"
                 android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                android:textSize="@dimen/news_source_text_size" />
 
             <TextView
                 android:id="@+id/news_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="This is a test News to check if long title of news is displayed perfectly or not"
+                android:padding="@dimen/textView_padding"
                 android:textColor="@android:color/white"
-                android:textSize="16sp"
+                android:textSize="@dimen/news_title_text_size"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/news_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="18 July"
+                android:padding="@dimen/textView_padding"
                 android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                android:textSize="@dimen/news_date_text_size" />
 
         </LinearLayout>
 

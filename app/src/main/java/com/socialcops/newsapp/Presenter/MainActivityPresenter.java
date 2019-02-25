@@ -150,7 +150,9 @@ public class MainActivityPresenter {
                 sourcesString = sourcesString+ selectedList.get(j) + ",";
             }
 
-            sourcesString = sourcesString.substring(0, sourcesString.length()-1);
+            if(sourcesString.length()>1)
+                sourcesString = sourcesString.substring(0, sourcesString.length()-1);
+            else sourcesString = "";
             mainView.fetchedSourcesList(sourcesString);
         });
 
