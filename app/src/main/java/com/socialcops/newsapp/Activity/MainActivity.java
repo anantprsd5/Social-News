@@ -160,7 +160,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
         page = 1;
         articles = new ArrayList<>();
         countryCodeValue = "";
-        mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
+        if(!isSearched)
+            mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
+        else mainActivityPresenter.getSearchedArticlesList(searchKey, page, sources);
         setDisplayHomeAsUpEnabled(true);
     }
 
@@ -224,7 +226,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 articles = new ArrayList<>();
                 recyclerView.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
-                mainActivityPresenter.getSearchedArticlesList(searchKey, page);
+                sortItem.setChecked(false);
+                mainActivityPresenter.getSearchedArticlesList(searchKey, page, sources);
                 return false;
             }
 
@@ -251,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 progressBar.setVisibility(View.VISIBLE);
                 countryCodeValue = telephonyManager.getNetworkCountryIso();
                 sources = "";
-                mainActivityPresenter.getArticlesList(page, countryCodeValue, sources);
+                mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
                 return true;
             }
         });
@@ -294,14 +297,16 @@ public class MainActivity extends AppCompatActivity implements MainView {
         page++;
         if (!isSearched)
             mainActivityPresenter.getArticlesList(page, sources, countryCodeValue);
-        else mainActivityPresenter.getSearchedArticlesList(searchKey, page);
+        else mainActivityPresenter.getSearchedArticlesList(searchKey, page, sources);
     }
 
     public void setDisplayHomeAsUpEnabled(boolean value){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(value);
-        getSupportActionBar().setDisplayShowHomeEnabled(value);
-        String title = value==true?"Sources":"Social News";
-        getSupportActionBar().setTitle(title);
+        if(!isSearched) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(value);
+            getSupportActionBar().setDisplayShowHomeEnabled(value);
+            String title = value == true ? "Sources" : "Social News";
+            getSupportActionBar().setTitle(title);
+        }
     }
 
     @Override

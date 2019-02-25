@@ -63,10 +63,11 @@ public class MainActivityPresenter {
         });
     }
 
-    public void getSearchedArticlesList(String query, int page) {
+    public void getSearchedArticlesList(String query, int page, String sources) {
         ApiService apiService = RetroClient.getApiService(context);
         //Call to retrofit to get JSON response converted to POJO
-        Call<News> call = apiService.getSearchJSON(query, Constants.API_KEY, Integer.toString(page));
+        Call<News> call = apiService.getSearchJSON(query, Constants.API_KEY, Integer.toString(page),
+                sources);
         call.enqueue(new Callback<News>() {
             @Override
             public void onResponse(Call<News> call, Response<News> response) {

@@ -19,7 +19,7 @@ public interface ApiService {
 
     @GET("everything")
     Call<News> getSearchJSON(@Query("q") String query, @Query("apiKey") String apiKey
-    , @Query("page") String page);
+    , @Query("page") String page, @Query("sources") String sources);
 
     @GET("sources")
     Call<SourceModel> getSourceJSON(@Query("apiKey") String apiKey);
